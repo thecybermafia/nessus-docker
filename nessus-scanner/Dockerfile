@@ -1,7 +1,5 @@
 FROM ubuntu:16.04 
 
-# MAINTAINED by Praveen Darshanam <cHJhdmVlbmQuaGFjQGdtYWlsLmNvbQo=>
-
 RUN apt-get update 
 
 # installs ping, netstat for debugging purposes
@@ -10,7 +8,8 @@ RUN apt-get install -y net-tools iputils-ping tzdata
 
 RUN rm -rf /var/lib/apt/lists/*
 
-COPY Nessus-7.1.1-ubuntu1110_amd64.deb /tmp/Nessus.deb
+#Place you Nessus-<latest-version>-ubuntu1110_amd64.deb in the same folder
+COPY Nessus-10.0.2-ubuntu1110_amd64.deb /tmp/Nessus.deb
 
 RUN dpkg -i /tmp/Nessus.deb
 
