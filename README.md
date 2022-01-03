@@ -51,21 +51,27 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 <none>              <none>              8b66cd8145eb        3 minutes ago       559MB
 ```
 
+### Running the generated image
+
 * Execute below commands to run the docker container
 ```
 docker run -d -p 8834:8834 8b66cd8145eb
 ```
-
-* Withing container nessusd listens on 8834
+* Execute below commands to check if the container is running
+```
+docker ps
+```
+```                  
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                       PORTS                    NAMES
+5eda12c204d9        8b66cd8145eb        "/opt/nessus/sbin/ne…"   16 seconds ago      Up 15 seconds                0.0.0.0:8834->8834/tcp   vibrant_wescoff
+```
 
 * If the container has successfully started, we can access it from browser using https://localhost:8834
+* Follow the steps to activate and create accounts
+* Note: Compiling the plugins might take some significant time
 
-- At step 1, create username, password
-- At step 2, generate "Activation Code". (search google for "nessus + activation code")
-- At step 3, Nessus starts initializing
-
-* We can login to the container using below command (got the id from `docker ps` command)
+* We can login to the container using below command after getting the id from `docker ps` command
 
 ```
-docker exec -it 8b66cd8145eb bash
+docker exec -it 5eda12c204d9 bash
 ```
