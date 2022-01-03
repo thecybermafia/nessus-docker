@@ -2,7 +2,7 @@
 ## Latest Nessus Vulnerability Scanner Docker Image
 * Checkout the code using
 ```
-$ git clone https://github.com/praveendhac/nessus-docker
+$ git clone https://github.com/thecybermafia/nessus-docker
 $ cd nessus-docker
 ```
 
