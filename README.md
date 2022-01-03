@@ -77,15 +77,9 @@ https://localhost:9934
 
 - At step 1, create username, password
 
-![alt text](images/nessus_create_account.png)
-
 - At step 2, generate "Activation Code". (search google for "nessus + activation code")
 
-![alt text](images/nessus_activation.png)
-
 - At step 3, Nessus starts initializing
-
-![alt text](images/nessus_initializing.png)
 
 * We can login to the container using below command (got the id from `docker ps` command)
 ```
