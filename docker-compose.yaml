@@ -7,4 +7,4 @@ services:
     restart: always
     build: nessus-scanner
     ports:
-      - 9934:8834
+      - 8834:8834
