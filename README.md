@@ -1,95 +1,71 @@
 
-## Latest Nessus Vulnerability Scanner Docker Image
+## Nessus Vulnerability Scanner for arm64 
 * Checkout the code using
 ```
 $ git clone https://github.com/thecybermafia/nessus-docker
 $ cd nessus-docker
 ```
+### Getting the latest version of Nessus 
 
-* Execute below commans to build docker image and start nessus Container
+1. Get the latest installer `Nessus-<latest-version>-ubuntu1110_amd64.deb` and place it inside the `nessus-scanner` directory
+2. Modify the filename on `line #12` inside `Dockerfile` to match the downloaded file i.e. `Nessus-<latest-version>-ubuntu1110_amd64.deb`
+
+### Cross-Platform Buildx Build
+
+* Execute below commands to build docker image using buildx and load it, you can also use `--push` switch to push the built images
 ```
-$ docker-compose -f docker-compose.yaml up
-Building nessus
-Step 1/8 : FROM ubuntu:16.04
- ---> 5e8b97a2a082
-Step 2/8 : RUN apt-get update
- ---> Running in a93b7f5900ab
-....snip....
-Fetched 25.3 MB in 2s (8689 kB/s)
-Reading package lists...
-Removing intermediate container a93b7f5900ab
- ---> cadf61d27904
-Step 3/8 : RUN apt-get install -y net-tools iputils-ping tzdata
- ---> Running in 2c59eee34dc3
-....snip....
-Step 4/8 : RUN rm -rf /var/lib/apt/lists/*
- ---> Running in 2ff140212b19
-Removing intermediate container 2ff140212b19
- ---> 9656babec872
-Step 5/8 : COPY Nessus-7.1.1-ubuntu1110_amd64.deb /tmp/Nessus.deb
- ---> 334180e1f817
-Step 6/8 : RUN dpkg -i /tmp/Nessus.deb
- ---> Running in 96f0dd9e9155
-Preparing to unpack /tmp/Nessus.deb ...
-Unpacking nessus (7.1.1) ...
-Setting up nessus (7.1.1) ...
-Unpacking Nessus Core Components...
-
-# nessus-docker
- - You can start Nessus by typing /etc/init.d/nessusd start
- - Then go to https://96f0dd9e9155:8834/ to configure your scanner
-
-Step 7/8 : EXPOSE 8834
- ---> Running in 39c904011360
-Removing intermediate container 39c904011360
- ---> df52b2233bbe
-Step 8/8 : ENTRYPOINT [ "/opt/nessus/sbin/nessusd" ]
- ---> Running in 8530df768ebb
-Removing intermediate container 8530df768ebb
- ---> 600640e272d5
-
-Successfully built 600640e272d5
-Successfully tagged nessus-docker_nessus:latest
-WARNING: Image for service nessus was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
-Recreating nessus-docker_nessus_1 ... error
-
-Recreating 3db3b5f12c7e_nessus-docker_nessus_1 ... done
-Attaching to nessus-docker_nessus_1
-nessus_1  | nessusd (Nessus) 7.1.1 [build M20117] for Linux
-nessus_1  | Copyright (C) 1998 - 2018 Tenable, Inc.
-nessus_1  |
-nessus_1  | Processing the Nessus plugins...
-[##################################################]
-nessus_1  |
-nessus_1  | All plugins loaded (1sec)
+docker buildx build -f Dockerfile --platform linux/amd64 . --load
+```
+```
+WARN[0000] invalid non-bool value for BUILDX_NO_DEFAULT_LOAD:  
+[+] Building 12.2s (12/12) FINISHED                                                                                                                                             
+ => [internal] load build definition from Dockerfile                                                                                                                       0.0s
+ => => transferring dockerfile: 564B                                                                                                                                       0.0s                              
+ => [internal] load .dockerignore                                                                                                                                          0.0s                              
+ => => transferring context: 2B                                                                                                                                            0.0s                              
+ => [internal] load metadata for docker.io/library/ubuntu:16.04                                                                                                            1.3s                              
+ => [1/6] FROM docker.io/library/ubuntu:16.04@sha256:0f71fa8d4d2d4292c3c617fda2b36f6dabe5c8b6e34c3dc5b0d17d4e704bd39c                                                      0.0s
+ => => resolve docker.io/library/ubuntu:16.04@sha256:0f71fa8d4d2d4292c3c617fda2b36f6dabe5c8b6e34c3dc5b0d17d4e704bd39c                                                      0.0s                              
+ => [internal] load build context                                                                                                                                          0.0s                              
+ => => transferring context: 58B                                                                                                                                           0.0s                              
+ => CACHED [2/6] RUN apt-get update                                                                                                                                        0.0s                              
+ => CACHED [3/6] RUN apt-get install -y net-tools iputils-ping tzdata                                                                                                      0.0s                              
+ => CACHED [4/6] RUN rm -rf /var/lib/apt/lists/*                                                                                                                           0.0s                              
+ => CACHED [5/6] COPY Nessus-10.0.2-ubuntu1110_amd64.deb /tmp/Nessus.deb                                                                                                   0.0s                              
+ => CACHED [6/6] RUN dpkg -i /tmp/Nessus.deb                                                                                                                               0.0s                              
+ => exporting to oci image format                                                                                                                                         10.8s                              
+ => => exporting layers                                                                                                                                                    6.4s
+ => => exporting manifest sha256:fe0eef329e2b8bbf495f062b192ba090bbf261d059d5a31c56d29de9f5d28299                                                                          0.0s
+ => => exporting config sha256:8b66cd8145ebce639b757acbb97ed2e5cc4b52003d0dead2c33857d01df6757a                                                                            0.0s                              
+ => => sending tarball                                                                                                                                                     4.4s
+ => importing to docker                                                                                                                                                    3.1s
+                                                                                   
 ```
 
-* Execute below commans to view list of running containers
+* Execute below commands to view list of images
 ```
-$ docker ps
-CONTAINER ID  IMAGE                 COMMAND                 CREATED             STATUS              PORTS                   NAMES
-6d330adac564  nessus-docker_nessus  "/opt/nessus/sbin/ne…"  About a minute ago  Up About a minute   0.0.0.0:9934->8834/tcp  nessus-docker_nessus_1
+docker image ls
 ```
-* Withing container nessusd listens on 8834, exposing usin 9934/tcp on host machine. Using 9934 to overcome port binding issues if someone already installed nessus on their local host.
+```
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+<none>              <none>              8b66cd8145eb        3 minutes ago       559MB
+```
 
-* If the container has successfully started, we can access it from browser using
-https://localhost:9934
+* Execute below commands to run the docker container
+```
+docker run -d -p 8834:8834 8b66cd8145eb
+```
+
+* Withing container nessusd listens on 8834
+
+* If the container has successfully started, we can access it from browser using https://localhost:8834
 
 - At step 1, create username, password
-
 - At step 2, generate "Activation Code". (search google for "nessus + activation code")
-
 - At step 3, Nessus starts initializing
 
 * We can login to the container using below command (got the id from `docker ps` command)
-```
-$ docker exec -it 6d330adac564 bash
-```
 
-# To build docker image of different OS
-We need to modify `nessus-scanner/Dockerfile`, nothing to modify in `docker-compose.yaml`
-* Change `FROM` to the OS of your interest (`FROM ubuntu:16.04` to `FROM centos:7`)
-* Change `RUN` commands reflecting the OS, say using yum, apk etc.
-* Download image specific to the OS of interest, place it in `nessus-scanner` directory
-* `RUN` the installation command specific to OS (dpkg, rpm, apk add etc.)
-* Change `ENTRYPOINT` reflecting the path where nessus is installed
+```
+docker exec -it 8b66cd8145eb bash
+```
